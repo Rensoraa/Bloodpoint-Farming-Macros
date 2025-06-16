@@ -144,5 +144,3 @@ class AutoUpdate {
     Reload() => Reload()
     Exit() => Exit()
 }
-
-AutoUpdate().UpdateIfNewVersion()
