@@ -7,3 +7,4 @@
  */
 
 config.continue := true
+config.continueGracePeriodMs := 0
