@@ -15,7 +15,7 @@ setMouseBlocked(shouldBlock := true) {
 
     if shouldBlock != isMouseBlocked {
         BlockInput(shouldBlock ? "MouseMove" : "MouseMoveOff")
-        Hotkey("LButton", BlockClick, shouldBlock ? "On" : "Off")
+        ; Hotkey("LButton", BlockClick, shouldBlock ? "On" : "Off") ; This clobbers other LButton handlers. Don't do this!
         isMouseBlocked := shouldBlock
     }
 

@@ -176,7 +176,7 @@ isTallyScreen() {
 tallyScoreMatchText := Coords2K(158, 630)
 isTallyBloodpointsScreen() => isWhiteish(coords.getColor(tallyScoreMatchText), threshold := 0xF8)
 
-cancelButtonRedMarker := Coords2K(2435, 1272)
+cancelButtonRedMarker := Coords2K(2433, 1283)
 isReadiedUp() => isRedish(coords.getColor(cancelButtonRedMarker))
 
 readyButtonRedBar := Coords2K(2430, 1257)

@@ -6,16 +6,19 @@
  * Disables if the user manually unreadies.
  * Re-enables if the user readies up again.
  */
-SetTimer(CheckReadyButton, 1000)
+SetTimer(CheckReadyButton, 500)
 setTrayIcon("icons/ready.ico")
 
-paused := false
+enabled := false
+
+#HotIf WinActive("DeadByDaylight")
+~^+!r:: setEnabled(!enabled)
 
 CheckReadyButton() {
     if (!dbdWindow.isActive())
         return
 
-    if (!paused and isReadyButtonVisible() and !isReadiedUp()) {
+    if (enabled and isReadyButtonVisible() and !isReadiedUp()) {
         readyUp()
     }
 }
@@ -24,17 +27,17 @@ readyUp() {
     if (!dbdWindow.isActive())
         return
 
-    logger.info("Readying up")
-
     ; Capture the initial mouse position
     MouseGetPos(&initialX, &initialY)
 
-    if (paused)
+    if (!enabled)
         return ; Final check to ensure we don't click if paused
 
+    logger.info("Readying up")
     withMouseBlocked(clickReadyButton)
 
     ; Move mouse back to initial position
+    Sleep(20)
     MouseMove(initialX, initialY, 0)
 }
 
@@ -44,21 +47,23 @@ clickReadyButton() {
     Click("down, Left")
     Sleep(50)
     Click("up, Left")
-    Sleep(20)
 }
 
 ~LButton::
 {
-    ; Disable for 60 seconds if the user unreadies.
+    if !WinActive("DeadByDaylight")
+        return
+
+    ; Disable if the user unreadies.
     ; Re-enable if the user readies up again.
-    if (isMouseInReadyButtonRegion()) {
+    if isMouseInReadyButtonRegion() {
         ; Wait for status to change
         Sleep(200)
 
         if (isReadiedUp()) {
-            unpause()
-        } else {
-            pause()
+            setEnabled(true)
+        } else if (isReadyButtonVisible()) {
+            setEnabled(false)
         }
     }
 }
@@ -70,14 +75,19 @@ isMouseInReadyButtonRegion() {
     return result
 }
 
-unpause() {
-    logger.info("Unpausing. Will auto-ready.")
-    global paused
-    paused := false
+setEnabled(newIsEnabled) {
+    global enabled
+    if enabled != newIsEnabled {
+        logger.info("Auto-ready: " (newIsEnabled ? "ON" : "off"))
+        enabled := newIsEnabled
+        showStatusToolTip()
+    }
 }
 
-pause() {
-    global paused
-    logger.info("Pausing")
-    paused := true
+showStatusToolTip() {
+    msg := "Auto-ready " (enabled ? "ON" : "off") "."
+    x := readyButtonWhiteR.x
+    y := readyButtonWhiteR.y - scaled.scaleY(70) ; above ready button
+    ToolTip(msg, x, y)
+    SetTimer(ToolTip.Bind(), -3000)
 }

@@ -1,6 +1,7 @@
 #Include Lib\test_includes.ahk
 #Include AutoUpdateTests.ahk
 #Include AutospenderTests.ahk
+#Include PregameTests.ahk
 #Include TallyTests.ahk
 
 Yunit
@@ -8,5 +9,6 @@ Yunit
     .Test(
         AutoSpenderTests,
         AutoUpdateTests,
+        PregameTests,
         TallyTests,
     )
