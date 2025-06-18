@@ -2,6 +2,7 @@
 #Include AutoUpdateTests.ahk
 #Include AutospenderTests.ahk
 #Include PregameTests.ahk
+#Include SettingsTests.ahk
 #Include TallyTests.ahk
 
 Yunit
@@ -10,5 +11,6 @@ Yunit
         AutoSpenderTests,
         AutoUpdateTests,
         PregameTests,
+        SettingsTests,
         TallyTests,
     )
