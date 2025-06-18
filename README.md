@@ -25,10 +25,6 @@ Macros to help with the repetitive/tedious aspects of farming bloodpoints in Dea
 - Disable filters if they interfere.
 - Demo: https://youtu.be/duVNbdo9qLM
 
-### Auto Click
-- Auto-clicker for spending bloodpoints.
-- F6 = Toggle ON / F7 = Toggle OFF
-
 ### Ready Up
 - Clicks the ready button as soon as it becomes visible.
 - Disables if the user manually unreadies.
