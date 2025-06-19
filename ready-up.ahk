@@ -11,7 +11,7 @@ setTrayIcon("icons/ready.ico")
 
 enabled := false
 
-#HotIf WinActive("DeadByDaylight")
+#HotIf WinActive(dbdWinTitle)
 ~^+!r:: setEnabled(!enabled)
 
 CheckReadyButton() {
@@ -51,7 +51,7 @@ clickReadyButton() {
 
 ~LButton::
 {
-    if !WinActive("DeadByDaylight")
+    if !WinActive(dbdWinTitle)
         return
 
     ; Disable if the user unreadies.

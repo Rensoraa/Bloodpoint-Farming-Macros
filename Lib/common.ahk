@@ -2,6 +2,7 @@
 
 #Include autoupdate_run.ahk
 #Include colors.ahk
+#Include constants.ahk
 #Include dbd.ahk
 #Include logging.ahk
 #Include retries.ahk

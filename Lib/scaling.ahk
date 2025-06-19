@@ -2,6 +2,7 @@
 
 #Include logging.ahk
 #Include blocking.ahk
+#Include constants.ahk
 
 CoordMode "Pixel", "Client"
 CoordMode "Mouse", "Client"
@@ -20,7 +21,7 @@ class DbdWindowOps {
             ; WinGetPos, winX, winY, DbdWidth, DbdHeight, DeadByDaylight
             ; WinGetPos does not return the client area height while windowed, regardless of CoordMode, Client.
             try {
-                hwnd := WinGetID("DeadByDaylight")
+                hwnd := WinGetID(dbdWinTitle)
                 rect := Buffer(16, 0)
                 DllCall("GetClientRect", "ptr", hwnd, "ptr", rect.Ptr)
 
@@ -35,7 +36,7 @@ class DbdWindowOps {
     }
     width => (this.checkScale(), this._width)
     height => (this.checkScale(), this._height)
-    isActive() => WinActive("DeadByDaylight")
+    isActive() => WinActive(dbdWinTitle)
 }
 
 /**

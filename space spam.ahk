@@ -1,6 +1,6 @@
 #Requires AutoHotkey v2.0
 #Include Lib\common.ahk
-#HotIf WinActive("DeadByDaylight")
+#HotIf WinActive(dbdWinTitle)
 setTrayIcon("icons\space.ico")
 
 /**

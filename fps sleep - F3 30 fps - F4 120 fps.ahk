@@ -1,6 +1,6 @@
 ﻿#Requires AutoHotkey v2+
 #Include Lib\common.ahk
-#HotIf WinActive("DeadByDaylight")
+#HotIf WinActive(dbdWinTitle)
 
 ; This macro much is slower than the default one,
 ; but does not depend on pixels being a specific color.

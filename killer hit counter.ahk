@@ -1,6 +1,6 @@
 #Requires AutoHotkey v2+
 #Include Lib\common.ahk
-#HotIf WinActive("DeadByDaylight")
+#HotIf WinActive(dbdWinTitle)
 
 ; Counts how many times M1 was pressed repeatedly with a debouce time of ~STBFL=8.
 ; Useful track the number of self-heal rotations in Reactive Healing builds.

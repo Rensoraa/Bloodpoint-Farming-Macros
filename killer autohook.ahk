@@ -9,7 +9,7 @@ setTrayIcon("icons/hook.ico")
 SetTimer(HookIfPossible, 200)
 
 HookIfPossible() {
-    if (WinActive("DeadByDaylight") and isHookSpaceOptionAvailable()) {
+    if (WinActive(dbdWinTitle) and isHookSpaceOptionAvailable()) {
         Send("{Space}")
     }
 }

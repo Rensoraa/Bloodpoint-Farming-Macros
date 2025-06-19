@@ -7,7 +7,7 @@ SetTimer(CheckContinueButton, 200)
 setTrayIcon("icons\tally.ico")
 
 CheckContinueButton() {
-    if !WinActive("DeadByDaylight")
+    if !WinActive(dbdWinTitle)
         return
 
     if isTallyScreen() {

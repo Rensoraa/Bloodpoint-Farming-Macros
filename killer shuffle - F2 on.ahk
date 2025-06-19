@@ -10,7 +10,7 @@ IsSDown := false
 IsWDown := false
 
 ; Start dancing
-#HotIf WinActive("DeadByDaylight")
+#HotIf WinActive(dbdWinTitle)
 ~F2::
 {
     global

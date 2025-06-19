@@ -1,6 +1,6 @@
 ﻿#Requires AutoHotkey v2+
 #Include Lib/common.ahk
-#HotIf WinActive("DeadByDaylight")
+#HotIf WinActive(dbdWinTitle)
 setTrayIcon("icons/fps-120.ico")
 
 ; Set 30 FPS

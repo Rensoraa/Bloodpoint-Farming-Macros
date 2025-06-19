@@ -6,7 +6,7 @@ Requirements:
 - Looks for pure white and black pixels of text.
   Reshade filters that make them off-white/black will cause this to fail.
 */
-#HotIf WinActive("DeadByDaylight")
+#HotIf WinActive(dbdWinTitle)
 #Include Lib/common.ahk
 
 setTrayIcon("icons/esc.ico")
@@ -20,7 +20,7 @@ SetTimer(CheckForAbandon, 500)
 
 CheckForAbandon() {
     global
-    if (!WinActive("DeadByDaylight")) {
+    if (!WinActive(dbdWinTitle)) {
         return
     }
 

@@ -16,7 +16,7 @@ SetTimer(CheckIfDbdRunning, 5000)
 
 CheckIfDbdRunning() {
     global
-    if WinExist("DeadByDaylight") {
+    if WinExist(dbdWinTitle) {
         if (!isDbdRunning) {
             logger.info("DBD found. Starting check loop.")
             startTime := A_TickCount
@@ -41,7 +41,7 @@ ClickThroughScreens() {
     } else {
         ; Not loaded/keep clicking...
         ; statusUpdate("Clicking through startup screens (" . elapsedSeconds() . " sec)...")
-        ControlClick(, "DeadByDaylight")
+        ControlClick(, dbdWinTitle)
     }
 }
 

@@ -3,7 +3,7 @@
 Bloodweb autospender using the speed tech from:
 https://www.reddit.com/r/deadbydaylight/s/njguTZBODp
 */
-#HotIf WinActive("DeadByDaylight")
+#HotIf WinActive(dbdWinTitle)
 #Include Lib\common.ahk
 
 setTrayIcon("icons/autopurchase.ico")
@@ -72,7 +72,7 @@ class AutoSpender {
         ; Stop if the user tabs out or moves the mouse
         MouseGetPos(&mouseX, &mouseY)
         mouseMoved := mouseX != scaled.scaleX(910) || mouseY != scaled.scaleY(755)
-        if (!WinActive("DeadByDaylight") || mouseMoved = true) {
+        if (!WinActive(dbdWinTitle) || mouseMoved = true) {
             this.disable()
             return
         }
