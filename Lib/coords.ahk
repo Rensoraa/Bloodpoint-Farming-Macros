@@ -14,6 +14,9 @@ class CoordsBase {
 
     scaledX() => Round(this.x * dbdWindow.width / this.width)
     scaledY() => Round(this.y * dbdWindow.height / this.height)
+    toString() => "(" this.x ", " this.y ")"
+    copy(x := this.x, y := this.y, width := this.width, height := this.height) =>
+      CoordsBase(x, y, width, height)
 }
 
 /**
@@ -50,7 +53,7 @@ class CoordsOps {
 
         color := ops.getColor(scaledX, scaledY)
 
-        logger.trace("getColor(" coords.x ", " coords.y ") => (" scaledX ", " scaledY ")=0x" Format("{:06X}", color))
+        logger.trace("getColor(" coords.x ", " coords.y ") => (" scaledX ", " scaledY ")=" Format("{:06X}", color))
 
         return color
     }
@@ -61,5 +64,17 @@ class CoordsOps {
 
         logger.trace("mouseMove(" coords.x ", " coords.y ") => (" scaledX ", " scaledY ")")
         return ops.mouseMove(scaledX, scaledY)
+    }
+
+    scale(coords) {
+        scaledX := coords.scaledX()
+        scaledY := coords.scaledY()
+        return CoordsBase(scaledX, scaledY, dbdWindow.width, dbdWindow.height)
+    }
+
+    ToolTip(msg, coords) {
+        scaledX := coords.scaledX()
+        scaledY := coords.scaledY()
+        ToolTip(msg, scaledX, scaledY)
     }
 }

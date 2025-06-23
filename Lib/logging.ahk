@@ -6,7 +6,7 @@ logger := LoggerOps()
 
 class LoggerOps {
     write(msg) {
-        OutputDebug(msg "`n")
+        OutputDebug(A_TickCount " " msg "`n")
     }
     error(msg) {
         this.write("error: " msg)

@@ -4,9 +4,11 @@
 #Include colors.ahk
 #Include constants.ahk
 #Include dbd.ahk
+#Include images.ahk
 #Include logging.ahk
 #Include retries.ahk
 #Include scaling.ahk
+#Include stopwatch.ahk
 
 #SingleInstance
 Persistent

@@ -19,11 +19,13 @@ Macros to help with the repetitive/tedious aspects of farming bloodpoints in Dea
 - DBD does *not* need to be focused.
 
 ### Autospend
-- F6 to spend BP using the [fast bloodweb tech](https://www.reddit.com/r/deadbydaylight/s/njguTZBODp).
-- Supports 1080p and 1440p resolutions.
-- Run windowed at these resolutions if you need to.
-- Disable filters if they interfere.
-- Demo: https://youtu.be/duVNbdo9qLM
+- F6 to purchase tagged items from the bloodweb using the [fast bloodweb tech](https://www.reddit.com/r/deadbydaylight/s/njguTZBODp).
+- Demo: https://youtu.be/h3Yr9y5W7GU
+- Supports 1080p and 1440p resolutions at 100% UI scale only. Run windowed at these resolutions if you need to. Disable filters if they interfere.
+- Copy the [tagged icons](https://drive.google.com/file/d/1kzCuztLwonmZpXnKO19nnBcFU9JZtTS0/view?usp=drive_link) you want it to purchase into:
+  - Steam: `C:\Program Files (x86)\Steam\steamapps\common\Dead by Daylight\DeadByDaylight\Content\UI\Icons`
+  - Epic: `C:\Program Files\Epic Games\DeadByDaylight\DeadByDaylight\Content\UI\Icons`
+- To reload icons: Play > Learn to Play > Survivor Tutorial > Exit.
 
 ### Ready Up
 - Clicks the ready button as soon as it becomes visible.

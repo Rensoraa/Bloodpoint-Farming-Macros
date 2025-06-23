@@ -2,6 +2,7 @@
 
 #Include ..\..\Lib\scaling.ahk
 #Include ..\..\Lib\Gdip_All.ahk
+#Include ..\Yunit\Yunit.ahk
 
 class DbdTestWindow extends DbdWindowOps {
     __New(pBitmap) {
@@ -90,8 +91,9 @@ class YunitExitOnTestFailure {
 }
 
 setupFakeWindow(screenshotPath) {
-    global dbdWindow, ops, scaled
+    global dbdWindow, ops, scaled, Gdip_BitmapFromScreenDelegate
     pBitmap := Gdip_CreateBitmapFromFile(screenshotPath)
+    Gdip_BitmapFromScreenDelegate := (x, y, w, h) => Gdip_CloneBitmapArea(pBitmap, x, y, w, h)
     dbdWindow := DbdTestWindow(pBitmap)
     ops := TestOps(pBitmap)
     return pBitmap

@@ -75,7 +75,7 @@ class ScaledOps {
 
         color := ops.getColor(scaledX, scaledY)
 
-        logger.trace("getColor(" x ", " y ") => (" scaledX ", " scaledY ")=0x" Format("{:06X}", color))
+        logger.trace("getColor(" x ", " y ") => (" scaledX ", " scaledY ")=" Format("{:06X}", color))
 
         return color
     }

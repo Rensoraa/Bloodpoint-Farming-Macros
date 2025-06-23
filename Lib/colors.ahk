@@ -29,6 +29,15 @@ RGBtoHSL(r, g, b) {
     return [h, s, l]  ; returns hue (0..1), saturation, lightness
 }
 
+
+colorToHSL(color) {
+    color := color & 0xFFFFFF
+    r := (color >> 16) & 0xFF
+    g := (color >> 8) & 0xFF
+    b := color & 0xFF
+    return RGBtoHSL(r, g, b)
+}
+
 isWhiteish(color, threshold := 0xD0, tolerance := 5) {
     ; Most reshade filters leave near-pure-white pixels as near-pure-white.
     r := (color >> 16) & 0xFF
