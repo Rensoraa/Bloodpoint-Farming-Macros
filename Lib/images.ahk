@@ -7,6 +7,9 @@ pToken := Gdip_Startup()
 
 class PBitmapImage {
     __New(pBitmap) {
+        if pBitmap = 0
+            throw Error("pBitmap == 0")
+
         width := 0, height := 0, stride := 0, scan0 := 0, bitmapData := Buffer(64)
 
         ; https://chatgpt.com/share/685670be-6a20-8010-ac87-8f904568c1ca

@@ -28,7 +28,7 @@ useBulkSpend := true
 bulkSpendToLevel := 10
 
 bw := Bloodweb([], [], [])
-belowBloodwebTab := Coords2K(80, 535)
+toolTipLocation := Coords2K(518, 150) ; Under character name and level
 
 ; Start spending
 ~F6:: {
@@ -51,20 +51,20 @@ stopRequested := false
 requestStop() {
     global stopRequested
     stopRequested := true
-    coords.ToolTip("Stopping...", belowBloodwebTab)
+    coords.ToolTip("Stopping...", toolTipLocation)
 }
 
-setEnabled(e) {
+setEnabled(newState) {
     global enabled, stopRequested
-    if enabled = e
+    if enabled = newState
         return
 
-    enabled := e
+    enabled := newState
     stopRequested := false
 
     logger.info((enabled ? "Started" : "Stopped") " spending")
 
-    coords.ToolTip(enabled ? "Spending. F6 or Alt+Tab to stop." : "", belowBloodwebTab)
+    coords.ToolTip(enabled ? "Spending. F6 or Alt+Tab to stop." : "", toolTipLocation)
     if enabled {
         startSpending()
     }
@@ -139,7 +139,7 @@ autospend() {
         }
 
         ; Bulk spend at level 50 after picking out the things we want. Skip the prestige interstitial.
-        if level = 50 and useBulkSpend {
+        if useBulkSpend and level = 50 and !Bloodweb.isP100() {
             bulkSpend()
             continue
         }

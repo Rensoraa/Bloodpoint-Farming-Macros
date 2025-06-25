@@ -93,6 +93,8 @@ class YunitExitOnTestFailure {
 setupFakeWindow(screenshotPath) {
     global dbdWindow, ops, scaled, Gdip_BitmapFromScreenDelegate
     pBitmap := Gdip_CreateBitmapFromFile(screenshotPath)
+    if pBitmap = 0
+        throw Error("pBitmap = 0 for " screenshotPath " ")
     Gdip_BitmapFromScreenDelegate := (x, y, w, h) => Gdip_CloneBitmapArea(pBitmap, x, y, w, h)
     dbdWindow := DbdTestWindow(pBitmap)
     ops := TestOps(pBitmap)
