@@ -202,4 +202,21 @@ class Bloodweb {
         isTeal(api) => Bloodweb.isTealMarker(api.getColor(this.bottomLeft))
         isBlue(api) => Bloodweb.isBlueMarker(api.getColor(this.bottomRight))
     }
+
+    static bulkSpendButton := Coords2K(1419, 286)
+    static isBulkSpendVisible() {
+        c := coords.getColor(Bloodweb.bulkSpendButton)
+        s := colorToHSL(c)[2]
+        return s < 0.1
+    }
+    static bulkSpendLevelPlusButton := Coords2K(1520, 654)
+    static bulkSpendConfirmButton := Coords2K(2010, 1111)
+    static isBulkSpendConfirmButtonVisible() {
+        ; This is very indirect, but we're looking for the pure black region above the button.
+        button := Bloodweb.bulkSpendConfirmButton
+        aboveBlack := coords.getColor(button.copy(, button.y - scaled.scaleY(60)))
+        return (aboveBlack & 0xFFFFFF) = 0
+    }
+    static bulkSpendOkButtonRed := Coords2K(2021, 1120)
+    static isBulkSpendOkVisible() => isRedish(coords.getColor(Bloodweb.bulkSpendOkButtonRed))
 }

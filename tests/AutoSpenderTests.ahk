@@ -71,6 +71,11 @@ class AutoSpenderTests {
 
     test_isBloodwebError() => assertFor("bloodweb\bloodweb_error.png", () => Bloodweb.isBloodwebError())
 
+    test_isBulkSpendVisible1() => assertFor("bloodweb\1440\laurie.png", () => Bloodweb.isBulkSpendVisible())
+    test_isBulkSpendVisible2() => assertFor("bloodweb\1440\quentin.png", () => Bloodweb.isBulkSpendVisible())
+    test_isBulkSpendOkVisible() => assertFor("bloodweb\1440\bulk-done.png", () => Bloodweb.isBulkSpendOkVisible())
+
+    test_isBulkSpendConfirmButtonVisible() => assertFor("bloodweb\1440\bulk-prompt.png", () => Bloodweb.isBulkSpendConfirmButtonVisible())
 }
 
 assertBloodwebLevel(expectedLevel, screenshotPath) {
