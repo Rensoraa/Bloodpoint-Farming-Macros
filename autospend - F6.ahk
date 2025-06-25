@@ -6,6 +6,7 @@ https://www.reddit.com/r/deadbydaylight/s/njguTZBODp
 #HotIf WinActive(dbdWinTitle)
 #Include Lib\common.ahk
 #Include Lib\bloodweb.ahk
+#MaxThreadsPerHotkey 2
 
 setTrayIcon("icons/autopurchase.ico")
 
@@ -27,13 +28,14 @@ useBulkSpend := true
 bulkSpendToLevel := 10
 
 bw := Bloodweb([], [], [])
+belowBloodwebTab := Coords2K(80, 535)
 
 ; Start spending
 ~F6:: {
     if enabled
-        disable()
+        requestStop()
     else
-        startSpending()
+        setEnabled(true)
 }
 
 ~^+F6:: {
@@ -44,24 +46,34 @@ bw := Bloodweb([], [], [])
 
 prevLevel := -1
 enabled := false
+stopRequested := false
+
+requestStop() {
+    global stopRequested
+    stopRequested := true
+    coords.ToolTip("Stopping...", belowBloodwebTab)
+}
 
 setEnabled(e) {
-    global enabled
-    enabled := e
-}
-
-disable() {
-    if !enabled
+    global enabled, stopRequested
+    if enabled = e
         return
-    setEnabled(false)
-    logger.info("Stopped spending")
-    ToolTip()
+
+    enabled := e
+    stopRequested := false
+
+    logger.info((enabled ? "Started" : "Stopped") " spending")
+
+    coords.ToolTip(enabled ? "Spending. F6 or Alt+Tab to stop." : "", belowBloodwebTab)
+    if enabled {
+        startSpending()
+    }
 }
 
-ensureEnabled() {
-    ; Stop if the user tabs out
-    if !WinActive(dbdWinTitle)
-        disable()
+shouldKeepRunning() {
+    ; Stop if the user tabs out or have requested to stop.
+    if stopRequested or !WinActive(dbdWinTitle)
+        setEnabled(false)
     return enabled
 }
 
@@ -71,12 +83,7 @@ setPrevLevel(l) {
 }
 
 startSpending() {
-    if enabled
-        return
-
     setBloodwebSize()
-    setEnabled(true)
-    logger.info("Started spending")
 
     level := getBloodwebLevel()
     if (level = -1) {
@@ -90,12 +97,11 @@ startSpending() {
 
     coords.mouseMove(topLeft)
     apb := coords.scale(Bloodweb.autopurchaseButton)
-    ; ToolTip("Autospending... (Alt+Tab to stop)", apb.x, apb.y)
     autospend()
 }
 
 autospend() {
-    while ensureEnabled() {
+    while shouldKeepRunning() {
         level := getBloodwebLevel()
         logger.info("Level " level)
 
@@ -106,9 +112,9 @@ autospend() {
         }
 
         ; Wait for the bloodweb to load.
-        while !waitUntilF(() => Bloodweb.isLoaded() or !ensureEnabled(), 5000) {
+        while !waitUntilF(() => Bloodweb.isLoaded() or !shouldKeepRunning(), 5000) {
             ; Bloodweb didn't load. Why?
-            if !ensureEnabled()
+            if !shouldKeepRunning()
                 return
 
             logger.warn("Bloodweb didn't load!")
@@ -128,7 +134,7 @@ autospend() {
 
         ; Buy specific items
         if !useAutopurchase or !isGuranteedLevel(level) {
-            if ensureEnabled()
+            if shouldKeepRunning()
                 buyMarkedItems()
         }
 
@@ -143,7 +149,7 @@ autospend() {
         ; Retry until something happens.
         doWithRetriesUntilF(
             action := clickAutopurchase,
-            predicate := () => hasLevelChanged() or !ensureEnabled() or !useAutopurchase,
+            predicate := () => hasLevelChanged() or !shouldKeepRunning() or !useAutopurchase,
             maxDurationMs := 10000,
             timeBetweenRetries := 500
         )
@@ -252,7 +258,7 @@ buyItemsAtPoints(points, depth, screenshot) {
     approxNodesConsumed := 0
 
     for point in points {
-        if !ensureEnabled()
+        if !shouldKeepRunning()
             return approxNodesConsumed
 
         local node := point
@@ -280,7 +286,7 @@ showUnmarkedNodes() {
     screenshot := bw.subscreenshot()
 
     for node in bw.all {
-        if !ensureEnabled()
+        if !shouldKeepRunning()
             return
 
         t := node.isTeal(screenshot)
@@ -293,7 +299,7 @@ showUnmarkedNodes() {
         }
     }
 
-    disable()
+    setEnabled(false)
 }
 
 setBloodwebSize() {
@@ -301,7 +307,7 @@ setBloodwebSize() {
     bw := Bloodweb.fromHeight(dbdWindow.height)
     if !bw.all.Length {
         MsgBox("Autospend only supports 1080p and 1440p. Run windowed if you need to.")
-        disable()
+        setEnabled(false)
     }
 }
 
@@ -314,7 +320,7 @@ cycleBloodweb() {
 }
 
 slowClick(p, holdTime := 50) {
-    if !ensureEnabled()
+    if !shouldKeepRunning()
         return
 
     logger.debug("Clicking " p.toString())
