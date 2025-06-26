@@ -89,14 +89,16 @@ startSpending() {
     if (level = -1) {
         ; Bloodweb is not visible. Open it.
         coords.click(bloodwebTab)
+
+        ; Then cycle it to make the contents load instantly.
         Sleep(100)
+        cycleBloodweb()
     }
 
     ; Initialize to the current level to avoid cycling unnecessarily.
     setPrevLevel(getBloodwebLevel())
 
     coords.mouseMove(topLeft)
-    apb := coords.scale(Bloodweb.autopurchaseButton)
     autospend()
 }
 
@@ -105,7 +107,7 @@ autospend() {
         level := getBloodwebLevel()
         logger.info("Level " level)
 
-        if (level > 0 && prevLevel != level) {
+        if (level > 0 && prevLevel != level or Bloodweb.isP100) {
             ; Cancel the bloodweb loading animation
             cycleBloodweb()
             setPrevLevel(level)
@@ -144,16 +146,55 @@ autospend() {
             continue
         }
 
-        ; Autopurchase untagged items.
-        clickAutopurchase()
-        ; Retry until something happens.
-        doWithRetriesUntilF(
-            action := clickAutopurchase,
-            predicate := () => hasLevelChanged() or !shouldKeepRunning() or !useAutopurchase,
-            maxDurationMs := 10000,
-            timeBetweenRetries := 500
-        )
+        if useAutopurchase {
+            ; Autopurchase untagged items.
+            autoPurchase()
+        }
     }
+}
+
+autoPurchase() {
+    ; Left of the button to avoid tooltip.
+    apbLeftRed := dbdWindow.height = 1440 ? Coords2K(884, 756) : Coords1080(663, 563)
+    isP100 := Bloodweb.isP100()
+    logger.info("isP100=" isP100)
+    
+    hasRedDisappeared := false
+    isAutoPurchaseComplete() {
+        if !shouldKeepRunning()
+            return true
+
+        if isP100 {
+            ; We can't rely on the level changing. It stays 50 forever.
+            ; For lack of anything better, we're going to watch for the red button
+            ; to disappear and reappear. This is suboptimal, but I'm out of time to
+            ; think of something better.
+            color := coords.getColor(apbLeftRed)
+            hsv := colorToHSV(color)
+            h := hsv[1]
+            s := hsv[2]
+            redishNow := (h > 350 or h < 15) and s > 0.5 ; isRedish() can't handle red this dark.
+
+            if !hasRedDisappeared and !redishNow {
+                logger.debug("No longer redish: " Format("{:06X}", color))
+                hasRedDisappeared := true
+            }
+
+            redReturned := hasRedDisappeared and redishNow
+            return redReturned
+        } else {
+            return hasLevelChanged()
+        }
+    }
+
+    clickAutopurchase()
+    ; Retry until something happens.
+    doWithRetriesUntilF(
+        action := clickAutopurchase,
+        predicate := isAutoPurchaseComplete,
+        maxDurationMs := 10000,
+        timeBetweenRetries := 500
+    )
 }
 
 bulkSpend() {
@@ -226,15 +267,32 @@ buyMarkedItems() {
     ; Since we work from outside to inside, some inside nodes may get consumed early,
     ; but this is fine since we recheck for the marker (which will be missing) before clicking.
     screenshot := bw.subscreenshot()
-    approxNodesConsumed += buyItemsAtPoints(bw.outerRing, 3, screenshot)
-    approxNodesConsumed += buyItemsAtPoints(bw.middleRing, 2, screenshot)
+
+    ; Determine priority of each tagged node.
+    queue := Map()
+    for node in bw.all {
+        if node.isTeal(screenshot) and node.isBlue(screenshot) {
+            color := screenshot.getColor(node.topLeft)
+            pri := Bloodweb.markerPriority(color)
+            if !queue.Has(pri)
+                queue[pri] := []
+
+            arr := queue[pri].Push(node)
+        }
+    }
+
+    for pri, nodes in queue {
+        logger.info("Priority " pri ": " nodes.Length " nodes...")
+        approxNodesConsumed += buyItemsAtPoints(nodes, screenshot)
+    }
 
     ; Only do the inner ring if the entity can actually reach it.
     ; We always get 6 guaranteed nodes before the entity starts consuming.
     ; Inner ring has 6 nodes and entity has to consume 2 before hitting inner ring.
-    if approxNodesConsumed > 2 or !useAutopurchase {
-        buyItemsAtPoints(bw.innerRing, 1, screenshot)
-    }
+    ; TODO: figure out how to reimplement this optimization
+    ; if approxNodesConsumed > 2 or !useAutopurchase {
+    ;     buyItemsAtPoints(bw.innerRing, screenshot)
+    ; }
     saveScreenshot(screenshot)
     screenshot.dispose()
     sw.report()
@@ -254,7 +312,7 @@ saveScreenshot(screenshot) {
 /**
  * @returns number of nodes consumed
  */
-buyItemsAtPoints(points, depth, screenshot) {
+buyItemsAtPoints(points, screenshot) {
     approxNodesConsumed := 0
 
     for point in points {
@@ -272,7 +330,7 @@ buyItemsAtPoints(points, depth, screenshot) {
                 maxDurationMs := 5000,
                 timeBetweenRetries := 2000
             )
-            approxNodesConsumed += depth
+            approxNodesConsumed += node.depth
         }
     }
     return approxNodesConsumed

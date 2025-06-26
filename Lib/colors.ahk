@@ -29,13 +29,42 @@ RGBtoHSL(r, g, b) {
     return [h, s, l]  ; returns hue (0..1), saturation, lightness
 }
 
-
 colorToHSL(color) {
     color := color & 0xFFFFFF
     r := (color >> 16) & 0xFF
     g := (color >> 8) & 0xFF
     b := color & 0xFF
     return RGBtoHSL(r, g, b)
+}
+
+colorToHSV(color) {
+    r := (color >> 16) & 0xFF
+    g := (color >> 8) & 0xFF
+    b := color & 0xFF
+
+    maxVal := Max(r, g, b)
+
+    ; Calculate Saturation
+    minVal := Min(r, g, b)
+    delta := maxVal - minVal
+
+    ; Saturation as [0..1]
+    s := (delta / maxVal)
+
+    ; Hue calculation (in degrees)
+    if (delta = 0)
+        h := 0
+    if (maxVal = r)
+        h := 60 * Mod(((g - b) / delta), 6)
+    else if (maxVal = g)
+        h := 60 * (((b - r) / delta) + 2)
+    else
+        h := 60 * (((r - g) / delta) + 4)
+
+    if (h < 0)
+        h += 360
+
+    return [h, s, maxVal]
 }
 
 isWhiteish(color, threshold := 0xD0, tolerance := 5) {
