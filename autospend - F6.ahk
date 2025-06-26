@@ -88,11 +88,7 @@ startSpending() {
     level := getBloodwebLevel()
     if (level = -1) {
         ; Bloodweb is not visible. Open it.
-        coords.click(bloodwebTab)
-
-        ; Then cycle it to make the contents load instantly.
-        Sleep(100)
-        cycleBloodweb()
+        openBloodwebTab()
     }
 
     ; Initialize to the current level to avoid cycling unnecessarily.
@@ -100,6 +96,17 @@ startSpending() {
 
     coords.mouseMove(topLeft)
     autospend()
+}
+
+openBloodwebTab() {
+    ; Open the bloodweb.
+    ; Ideally, we'd like to cycle it 2 more times to animation-cancel,
+    ; but I seem to get more Bloodweb Error when I do that.
+    ; Since we only do this when we're starting to spend, it's not worth it.
+    loop 1 {
+        coords.click(bloodwebTab) ; bloodweb tab
+        Sleep(100)
+    }
 }
 
 autospend() {
@@ -124,7 +131,7 @@ autospend() {
                 logger.info("Handling bloodweb error.")
                 coords.click(Bloodweb.bloodwebErrorOkButtonRed)
             } else {
-                coords.click(bloodwebTab)
+                openBloodwebTab()
             }
         }
 
@@ -158,7 +165,7 @@ autoPurchase() {
     apbLeftRed := dbdWindow.height = 1440 ? Coords2K(884, 756) : Coords1080(663, 563)
     isP100 := Bloodweb.isP100()
     logger.info("isP100=" isP100)
-    
+
     hasRedDisappeared := false
     isAutoPurchaseComplete() {
         if !shouldKeepRunning()
