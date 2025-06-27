@@ -10,7 +10,10 @@ pollInterval := 200
 checkQ() {
     if WinActive(dbdWinTitle) and isQVisible() {
         logger.info("Pressing Q.")
-        Send("q")
+        
+        Send("{q down}")
+        Sleep(50)
+        Send("{q up}")
     }
 }
 SetTimer(checkQ, pollInterval)
