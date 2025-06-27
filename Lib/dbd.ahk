@@ -193,3 +193,11 @@ readyButtonWhiteR := Coords2K(2278, 1260)
 isReadyButtonVisible() {
     return isRedish(coords.getColor(readyButtonRedBar)) and isWhiteish(coords.getColor(readyButtonWhiteR), threshold := 0x90)
 }
+
+isQVisible() {
+    whiteQ := Coords2K(417, 1131)
+    blackQLeft := Coords2K(413, 1131)
+    blackQRight := Coords2K(419, 1131)
+
+    return coords.getColor(whiteQ) = 0xFFFFFF and coords.getColor(blackQLeft) = 0 and coords.getColor(blackQLeft) = 0
+}

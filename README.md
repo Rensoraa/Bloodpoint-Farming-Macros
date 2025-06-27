@@ -59,6 +59,9 @@ Macros to help with the repetitive/tedious aspects of farming bloodpoints in Dea
 - If that doesn't work, activate manually with Ctrl+Shift+A.
 - UI scale must be 100%
 
+### Q
+- Uses the Anniversary invitation on cooldown by pressing Q.
+
 ## Killer macros
 ### Killer Shuffle
 - Killer will repeatedly move forwards and backwards in place to allow survivors to get into chase (Spin blinding, Gen dancing, etc.).
