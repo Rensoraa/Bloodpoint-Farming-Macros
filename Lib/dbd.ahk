@@ -109,35 +109,25 @@ getBloodwebLevel() {
 isAbandonEscapeOptionVisible() {
     ; Samples the [ESC] ABANDON button background in the top right
     ; in a spot that's common across keyboard (ESC), PS5 (OPTIONS)
+    blackBg1 := Coords2K(2202, 104)
+    if coords.getColor(blackBg1) != 0
+        return false
 
-    ; The button position moved for dbd 8.7.0.
-    xShift := 9
-    yShift := 19
+    blackBg2 := Coords2K(2202, 80)
+    if coords.getColor(blackBg2) != 0
+        return false
 
-    ; Black background
-    bgLeftX := 2189 + xShift
-    bgRightX := 2199 + xShift
-    bgTopY := 82 + yShift
-    bgBotY := 88 + yShift
-    escBlackBg1 := scaled.getColor(bgLeftX, bgTopY)
-    escBlackBg2 := scaled.getColor(bgRightX, bgTopY)
-    escBlackBg3 := scaled.getColor(bgLeftX, bgBotY)
-    escBlackBg4 := scaled.getColor(bgRightX, bgBotY)
+    ; White text, or Xbox hamburger button
+    escEWhite := Coords2K(2201, 92)
+    if !isWhiteish(coords.getColor(escEWhite), 0xF0)
+        return false
 
-    ; Outside of the button, which we assume to be non-black.
-    fgLeftX := 2169 + xShift
-    fgRightX := 2220 + xShift
-    fgTopY := 43 + yShift
-    fgBotY := 104 + yShift
-    escNotBlackBg1 := scaled.getColor(fgLeftX, fgTopY)
-    escNotBlackBg2 := scaled.getColor(fgRightX, fgTopY)
-    escNotBlackBg3 := scaled.getColor(fgLeftX, fgBotY)
-    escNotBlackBg4 := scaled.getColor(fgRightX, fgBotY)
+    ; TODO: this doesn't pass for all tests.
+    ; escCWhite := Coords2K(2208, 92)
+    ; if !isWhiteish(coords.getColor(escCWhite), 0xF0)
+    ;     return false
 
-    buttonIsBlack := escBlackBg1 = 0 and escBlackBg2 = 0 and escBlackBg3 = 0 and escBlackBg4 = 0
-    surroundIsNotBlack := escNotBlackBg1 != 0 and escNotBlackBg2 != 0 and escNotBlackBg3 != 0 and escNotBlackBg4 != 0
-
-    return buttonIsBlack and surroundIsNotBlack
+    return true
 }
 
 isAbandonConfirmOpen() {
