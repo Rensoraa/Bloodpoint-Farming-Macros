@@ -25,7 +25,7 @@ class PBitmapImage {
 
     getColor(x, y) {
         if (x < 0 || y < 0)
-            throw Error("Coordinates must be non-negative")
+            throw Error("Coordinates must be non-negative (" x, ", " y ")")
         if x >= this.width or y >= this.height
             throw Error("(" x ", " y ") out of bounds for " this.width "x" this.height)
 
@@ -79,6 +79,25 @@ class Subscreenshot {
     }
 
     static of(x, y, w, h) => Subscreenshot(x, y, PBitmapImage.of(x, y, w, h))
+
+    /**
+     * @returns subscreenshot rectangle enclosing all of the points.
+     */
+    static enclose(points) {
+        xMin := 99999
+        yMin := 99999
+        xMax := 0
+        yMax := 0
+        for point in points {
+            scaledX := scaled.scaleX(point.x)
+            scaledY := scaled.scaleY(point.y)
+            xMin := Min(xMin, scaledX)
+            yMin := Min(yMin, scaledY)
+            xMax := Max(xMax, scaledX)
+            yMax := Max(yMax, scaledY)
+        }
+        return Subscreenshot.of(xMin, yMin, xMax - xMin + 1, yMax - yMin + 1)
+    }
 
     /**
      * Gets the color using coordinates relative to the whole DBD window.
