@@ -34,6 +34,18 @@ Macros to help with the repetitive/tedious aspects of farming bloodpoints in Dea
 ### Continue
 - Auto-clicks the CONTINUE button.
 
+### Tally
+- Captures BP, Scoreboard, Emblems, XP, etc. during the Tally screen and saves a screenshot to `%userprofile%\Pictures\dbd-matches\`.
+- Keeps newest 300 screenshots
+- <details>
+  <summary>Screenshot</summary>
+  <img src="assets/tally.jpg" alt="Sample image of tally screen produced by the macro" width="600"/>
+  </details>
+
+### Tally Continue
+- Does everything that [Tally](#Tally) does, but also...
+- Clicks the CONTINUE button.
+
 ### Space Spam
 - Spams space bar events while the actual space bar is held down.
 - Useful for failing skill checks to regress a generator quickly.
