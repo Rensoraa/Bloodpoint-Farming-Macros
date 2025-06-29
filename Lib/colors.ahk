@@ -49,12 +49,15 @@ colorToHSV(color) {
     delta := maxVal - minVal
 
     ; Saturation as [0..1]
-    s := (delta / maxVal)
+    if (maxVal = 0)
+        s := 0
+    else
+        s := (delta / maxVal)
 
     ; Hue calculation (in degrees)
     if (delta = 0)
         h := 0
-    if (maxVal = r)
+    else if (maxVal = r)
         h := 60 * Mod(((g - b) / delta), 6)
     else if (maxVal = g)
         h := 60 * (((b - r) / delta) + 2)
