@@ -23,4 +23,5 @@ class QTests {
 
     test1080() => assertFor("match\q1080.png", isQVisible)
     test1440() => assertFor("match\q1440.png", isQVisible)
+    test1440Dpad() => assertFor("match\q1440dpad.png", isQVisible)
 }

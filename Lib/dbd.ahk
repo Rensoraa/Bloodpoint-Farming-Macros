@@ -185,9 +185,9 @@ isReadyButtonVisible() {
 }
 
 isQVisible() {
-    whiteQ := Coords2K(417, 1131)
-    blackQLeft := Coords2K(413, 1131)
-    blackQRight := Coords2K(419, 1131)
+    whiteQ := Coords2K(406, 1131)
+    blackQTop := Coords2K(412, 1119)
+    blackQRight := Coords2K(412, 1145)
 
-    return coords.getColor(whiteQ) = 0xFFFFFF and coords.getColor(blackQLeft) = 0 and coords.getColor(blackQLeft) = 0
+    return coords.getColor(whiteQ) = 0xFFFFFF and coords.getColor(blackQTop) = 0 and coords.getColor(blackQTop) = 0
 }
