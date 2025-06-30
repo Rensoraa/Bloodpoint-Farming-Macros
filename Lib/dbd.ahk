@@ -185,9 +185,27 @@ isReadyButtonVisible() {
 }
 
 isQVisible() {
-    whiteQ := Coords2K(406, 1131)
-    blackQTop := Coords2K(412, 1119)
-    blackQRight := Coords2K(412, 1145)
+    topLeft := Coords2K(392, 1113)
+    botRight := Coords2K(432, 1156)
+    sub := Subscreenshot.enclose([topLeft, botRight])
+    img := sub.img
+    ; Count the pure black/white pixels as a heuristic for the prompt.
+    pureWhite := 0
+    pureBlack := 0
+    loop img.height {
+        y := A_Index - 1
+        loop img.width {
+            x := A_Index - 1
+            color := img.getColor(x, y)
+            if color = 0
+                pureBlack += 1
+            if color = 0xFFFFFF
+                pureWhite += 1
+        }
+    }
+    totalPx := img.height * img.width
+    sub.dispose()
 
-    return coords.getColor(whiteQ) = 0xFFFFFF and coords.getColor(blackQTop) = 0 and coords.getColor(blackQTop) = 0
+    ratioBlack := pureBlack / totalPx
+    return ratioBlack > 0.3 and pureWhite >= 2
 }
