@@ -17,7 +17,7 @@ class DbdWindowOps {
     checkScale() {
         static lastCheck := 0
 
-        if (A_TickCount - lastCheck > 1000) {
+        if (A_TickCount - lastCheck > 100) {
             ; WinGetPos, winX, winY, DbdWidth, DbdHeight, DeadByDaylight
             ; WinGetPos does not return the client area height while windowed, regardless of CoordMode, Client.
             try {
