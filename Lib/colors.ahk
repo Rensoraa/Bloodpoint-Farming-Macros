@@ -101,3 +101,20 @@ isRedish(color) {
     ; Reddish hue range: 0–20 or 340–360
     return (hue <= 20 || hue >= 340) and sat > 0.6 and r > 0x50
 }
+
+countPureColors(img) {
+    pureWhite := 0
+    pureBlack := 0
+    loop img.height {
+        y := A_Index - 1
+        loop img.width {
+            x := A_Index - 1
+            color := img.getColor(x, y)
+            if color = 0
+                pureBlack += 1
+            if color = 0xFFFFFF
+                pureWhite += 1
+        }
+    }
+    return { white: pureWhite, black: pureBlack }
+}

@@ -44,6 +44,11 @@ class PBitmapImage {
     }
 
     /**
+     * The number of pixels in the image.
+     */
+    size() => this.height * this.width
+
+    /**
      * Capture a section of the DBD window.
      * 
      * Performance greatly depends on number of size of the region captured.

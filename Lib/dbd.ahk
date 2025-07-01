@@ -107,27 +107,16 @@ getBloodwebLevel() {
 }
 
 isAbandonEscapeOptionVisible() {
-    ; Samples the [ESC] ABANDON button background in the top right
-    ; in a spot that's common across keyboard (ESC), PS5 (OPTIONS)
-    blackBg1 := Coords2K(2202, 104)
-    if coords.getColor(blackBg1) != 0
-        return false
+    ; Looks for the pure black/white pixels of [ESC] ABANDON button in the top right
+    topLeft := Coords2K(2182, 74)
+    botRight := Coords2K(2222, 114)
 
-    blackBg2 := Coords2K(2202, 80)
-    if coords.getColor(blackBg2) != 0
-        return false
-
-    ; White text, or Xbox hamburger button
-    escEWhite := Coords2K(2201, 92)
-    if !isWhiteish(coords.getColor(escEWhite), 0xF0)
-        return false
-
-    ; TODO: this doesn't pass for all tests.
-    ; escCWhite := Coords2K(2208, 92)
-    ; if !isWhiteish(coords.getColor(escCWhite), 0xF0)
-    ;     return false
-
-    return true
+    sub := Subscreenshot.enclose([topLeft, botRight])
+    img := sub.img
+    counts := countPureColors(img)
+    ratioBlack := counts.black / img.size()
+    ratioWhite := counts.white / img.size()
+    return ratioBlack > 0.3 and ratioWhite > 0.05
 }
 
 isAbandonConfirmOpen() {
@@ -190,22 +179,9 @@ isQVisible() {
     sub := Subscreenshot.enclose([topLeft, botRight])
     img := sub.img
     ; Count the pure black/white pixels as a heuristic for the prompt.
-    pureWhite := 0
-    pureBlack := 0
-    loop img.height {
-        y := A_Index - 1
-        loop img.width {
-            x := A_Index - 1
-            color := img.getColor(x, y)
-            if color = 0
-                pureBlack += 1
-            if color = 0xFFFFFF
-                pureWhite += 1
-        }
-    }
-    totalPx := img.height * img.width
+    counts := countPureColors(img)
     sub.dispose()
 
-    ratioBlack := pureBlack / totalPx
-    return ratioBlack > 0.3 and pureWhite >= 2
+    ratioBlack := counts.black / img.size()
+    return ratioBlack > 0.3 and counts.white >= 2
 }
