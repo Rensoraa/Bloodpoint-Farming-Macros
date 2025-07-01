@@ -112,7 +112,7 @@ countPureColors(img) {
             color := img.getColor(x, y)
             if color = 0
                 pureBlack += 1
-            if color = 0xFFFFFF
+            if (color | 0x070707) = 0xFFFFFF
                 pureWhite += 1
         }
     }
