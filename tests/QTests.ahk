@@ -25,4 +25,5 @@ class QTests {
     test1440() => assertFor("match\q1440.png", isQVisible)
     test1440Dpad() => assertFor("match\q1440dpad.png", isQVisible)
     test664() => assertFor("match\q664.png", isQVisible)
+    test70procent() => assertFor("match\q1080(70% hud scale).png", isQVisible)
 }
